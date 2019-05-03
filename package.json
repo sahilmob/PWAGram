@@ -1,0 +1,22 @@
+{
+	"name": "pwa-complete-guide",
+	"version": "1.0.0",
+	"description": "A complete guide to PWAs. Building a simple Instagram clone.",
+	"main": "index.js",
+	"scripts": {
+		"start": "ws -d ./public"
+	},
+	"keywords": [
+		"pwa",
+		"progressive",
+		"web",
+		"app",
+		"complete",
+		"tutorial"
+	],
+	"author": "Sahil Mobaidin",
+	"license": "ISC",
+	"devDependencies": {
+		"local-web-server": "^2.6.1"
+	}
+}
