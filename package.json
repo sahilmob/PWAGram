@@ -4,7 +4,7 @@
 	"description": "A complete guide to PWAs. Building a simple Instagram clone.",
 	"main": "index.js",
 	"scripts": {
-		"start": "ws -d ./public"
+		"start": "ws -p 7000 -d ./public"
 	},
 	"keywords": [
 		"pwa",
