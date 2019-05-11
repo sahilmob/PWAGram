@@ -80,7 +80,9 @@ self.addEventListener("fetch", function(event) {
 						})
 						.catch(function(err) {
 							return caches.open(CACHE_STATIC_NAME).then(function(cache) {
-								return cache.match("/offline.html");
+								if (event.request.url.index("/help")) {
+									return cache.match("/offline.html");
+								}
 							});
 						});
 				}
