@@ -43,6 +43,28 @@ self.addEventListener("activate", function(event) {
 	return self.clients.claim();
 });
 
+// self.addEventListener("fetch", function(event) {
+// 	event.respondWith(
+// 		fetch(event.request).then(function(response) {
+// 			caches.open(CACHE_DYNAMIC_NAME).then(function(cache) {
+// 				cache.put(event.request.url, response);
+// 				return response;
+// 			});
+// 		})
+// 	);
+// });
+
+self.addEventListener("fetch", function(event) {
+	event.respondWith(
+		caches.open(CACHE_DYNAMIC_NAME).then(function(cache) {
+			fetch(event.request).then(function(response) {
+				cache.put(event.request.url, response.clone());
+				return response;
+			});
+		})
+	);
+});
+
 //Implementing dynamic caching after requesting data from the network
 // self.addEventListener("fetch", function(event) {
 // 	event.respondWith(
@@ -67,17 +89,18 @@ self.addEventListener("activate", function(event) {
 // 	);
 // });
 
-self.addEventListener("fetch", function(event) {
-	event.respondWith(
-		fetch(event.request)
-			.then(function(res) {
-				return caches.open(CACHE_DYNAMIC_NAME).then(function(cache) {
-					cache.put(event.request.url, res.clone());
-					return res;
-				});
-			})
-			.catch(function(err) {
-				return caches.match(event.request);
-			})
-	);
-});
+// Network first strategy
+// self.addEventListener("fetch", function(event) {
+// 	event.respondWith(
+// 		fetch(event.request)
+// 			.then(function(res) {
+// 				return caches.open(CACHE_DYNAMIC_NAME).then(function(cache) {
+// 					cache.put(event.request.url, res.clone());
+// 					return res;
+// 				});
+// 			})
+// 			.catch(function(err) {
+// 				return caches.match(event.request);
+// 			})
+// 	);
+// });

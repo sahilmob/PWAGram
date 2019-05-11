@@ -30,7 +30,7 @@ shareImageButton.addEventListener("click", openCreatePostModal);
 
 closeCreatePostModalButton.addEventListener("click", closeCreatePostModal);
 
-// Currently nit in use, allows to save cache on demand
+// Currently not in use, allows to save cache on demand
 // function onSaveButtonClicked(event) {
 // 	console.log("clicked");
 // 	if ("caches" in window) {
@@ -40,6 +40,12 @@ closeCreatePostModalButton.addEventListener("click", closeCreatePostModal);
 // 		});
 // 	}
 // }
+
+function clearCards() {
+	while (sharedMomentsArea.hasChildNodes) {
+		sharedMomentsArea.removeChild(sharedMomentsArea.lastChild);
+	}
+}
 
 function createCard() {
 	var cardWrapper = document.createElement("div");
@@ -68,10 +74,31 @@ function createCard() {
 	sharedMomentsArea.appendChild(cardWrapper);
 }
 
-fetch("https://httpbin.org/get")
+var url = "https://httpbin.org/get";
+var networkDataReceived = false;
+
+fetch(url)
 	.then(function(res) {
 		return res.json();
 	})
 	.then(function(data) {
+		networkDataReceived = true;
+		clearCards();
 		createCard();
 	});
+
+if ("caches" in window) {
+	caches
+		.match(url)
+		.then(function(response) {
+			if (response) {
+				// if response is found, we can parse it as json, cause it's a normal fetch response
+				return response.json();
+			}
+		})
+		.then(function(data) {
+			if (!networkDataReceived) {
+				createCard();
+			}
+		});
+}
