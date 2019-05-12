@@ -80,7 +80,7 @@ self.addEventListener("fetch", function(event) {
 		event.respondWith(
 			caches.open(CACHE_DYNAMIC_NAME).then(function(cache) {
 				fetch(event.request).then(function(response) {
-					trimCache(CACHE_DYNAMIC_NAME, 3);
+					// trimCache(CACHE_DYNAMIC_NAME, 3);
 					cache.put(event.request.url, response.clone());
 					return response;
 				});
