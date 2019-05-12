@@ -43,6 +43,7 @@ closeCreatePostModalButton.addEventListener("click", closeCreatePostModal);
 
 function clearCards() {
 	while (sharedMomentsArea.hasChildNodes) {
+		console.log("Clearing cards");
 		sharedMomentsArea.removeChild(sharedMomentsArea.lastChild);
 	}
 }
@@ -84,7 +85,11 @@ fetch(url)
 	.then(function(data) {
 		networkDataReceived = true;
 		clearCards();
+		console.log("creating card after request");
 		createCard();
+	})
+	.catch(function(err) {
+		console.log("Error fetching request", err);
 	});
 
 if ("caches" in window) {
@@ -98,6 +103,7 @@ if ("caches" in window) {
 		})
 		.then(function(data) {
 			if (!networkDataReceived) {
+				console.log("creating card from cache");
 				createCard();
 			}
 		});
