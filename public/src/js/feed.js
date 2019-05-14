@@ -108,20 +108,29 @@ fetch(url)
 		console.log("Error fetching request", err);
 	});
 
-if ("caches" in window) {
-	caches
-		.match(url)
-		.then(function(response) {
-			if (response) {
-				// if response is found, we can parse it as json, cause it's a normal fetch response
-				return response.json();
-			}
-		})
-		.then(function(data) {
-			if (!networkDataReceived) {
-				console.log("creating card from cache");
-				var dataArray = transformObjectIntoArray(data);
-				updateUI(dataArray);
-			}
-		});
+if ("indexedDB" in window) {
+	console.log("There is indexDB");
+	readAllData("posts").then(function(data) {
+		if (!networkDataReceived) {
+			console.log("From cache", data);
+			updateUI(data);
+		}
+	});
 }
+// if ("caches" in window) {
+// 	caches
+// 		.match(url)
+// 		.then(function(response) {
+// 			if (response) {
+// 				// if response is found, we can parse it as json, cause it's a normal fetch response
+// 				return response.json();
+// 			}
+// 		})
+// 		.then(function(data) {
+// 			if (!networkDataReceived) {
+// 				console.log("creating card from cache");
+// 				var dataArray = transformObjectIntoArray(data);
+// 				updateUI(dataArray);
+// 			}
+// 		});
+// }
