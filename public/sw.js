@@ -20,6 +20,7 @@ var STATIC_FILES = [
 	"https://fonts.googleapis.com/icon?family=Material+Icons",
 	"https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css"
 ];
+var url = "https://pwagram-f1780.firebaseio.com/posts.json";
 
 function trimCache(cacheName, maxItems) {
 	caches.open(cacheName).then(function(cache) {
@@ -79,7 +80,6 @@ function isInArray(string, array) {
 }
 
 self.addEventListener("fetch", function(event) {
-	var url = "https://pwagram-f1780.firebaseio.com/posts.json";
 	if (event.request.url.indexOf(url) > -1) {
 		event.respondWith(
 			fetch(event.request).then(function(res) {
@@ -119,6 +119,43 @@ self.addEventListener("fetch", function(event) {
 									return cache.match("/offline.html");
 								}
 							});
+						});
+				}
+			})
+		);
+	}
+});
+
+self.addEventListener("sync", function(event) {
+	console.log("[Service worker] Background syncing", event);
+	if (event.tag === "sync-new-post") {
+		console.log("[Service worker] Syncing new post");
+		event.waitUntil(
+			readAllData("sync-posts").then(function(data) {
+				//loop through data to check if there is more than one post submitted while there is no connection
+				for (var dt of data) {
+					fetch(url, {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+							Accept: "application/json"
+						},
+						body: JSON.stringify({
+							id: dt.id,
+							title: dt.title,
+							location: dt.location,
+							image:
+								"https://firebasestorage.googleapis.com/v0/b/pwagram-f1780.appspot.com/o/sf-boat.jpg?alt=media&token=65d437f9-c833-47a8-a881-cd6207983ef4"
+						})
+					})
+						.then(function(response) {
+							console.log("Sent data", response);
+							if (response.ok) {
+								deleteItemFromData("sync-posts", dt.id);
+							}
+						})
+						.catch(function(err) {
+							console.log("Error while sending data", err);
 						});
 				}
 			})
