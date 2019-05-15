@@ -61,7 +61,7 @@ function createCard(data) {
 	cardTitle.style.height = "180px";
 	cardWrapper.appendChild(cardTitle);
 	var cardTitleTextElement = document.createElement("h2");
-	cardTitleTextElement.style.color = "green";
+	cardTitleTextElement.style.color = "white";
 	cardTitleTextElement.className = "mdl-card__title-text";
 	cardTitleTextElement.textContent = data.title;
 	cardTitle.appendChild(cardTitleTextElement);
@@ -122,7 +122,7 @@ if ("indexedDB" in window) {
 }
 
 function sendData() {
-	fetch(url, {
+	fetch("https://us-central1-pwagram-f1780.cloudfunctions.net/storePostData", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
