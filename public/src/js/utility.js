@@ -20,3 +20,12 @@ function readAllData(storeName) {
 		return store.getAll();
 	});
 }
+
+function clearAllData(storeName) {
+	return dbPromise.then(function(db) {
+		var tx = db.transaction(storeName, "readwrite");
+		var store = tx.objectStore(storeName);
+		store.clear();
+		return tx.complete;
+	});
+}
