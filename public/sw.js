@@ -134,24 +134,30 @@ self.addEventListener("sync", function(event) {
 			readAllData("sync-posts").then(function(data) {
 				//loop through data to check if there is more than one post submitted while there is no connection
 				for (var dt of data) {
-					fetch(url, {
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-							Accept: "application/json"
-						},
-						body: JSON.stringify({
-							id: dt.id,
-							title: dt.title,
-							location: dt.location,
-							image:
-								"https://firebasestorage.googleapis.com/v0/b/pwagram-f1780.appspot.com/o/sf-boat.jpg?alt=media&token=65d437f9-c833-47a8-a881-cd6207983ef4"
-						})
-					})
+					fetch(
+						"https://us-central1-pwagram-f1780.cloudfunctions.net/storePostData",
+						{
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json",
+								Accept: "application/json"
+							},
+							body: JSON.stringify({
+								id: dt.id,
+								title: dt.title,
+								location: dt.location,
+								image:
+									"https://firebasestorage.googleapis.com/v0/b/pwagram-f1780.appspot.com/o/sf-boat.jpg?alt=media&token=65d437f9-c833-47a8-a881-cd6207983ef4"
+							})
+						}
+					)
 						.then(function(response) {
 							console.log("Sent data", response);
 							if (response.ok) {
-								deleteItemFromData("sync-posts", dt.id);
+								response.json().then(function(resData) {
+									console.log("resData", resData);
+									deleteItemFromData("sync-posts", resData.id);
+								});
 							}
 						})
 						.catch(function(err) {
