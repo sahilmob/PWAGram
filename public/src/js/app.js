@@ -25,12 +25,20 @@ window.addEventListener("beforeinstallprompt", function(event) {
 	return false;
 });
 
+function displayConfirmationNotification() {
+	var options = {
+		body: "You successfully subscribed to our notification service!"
+	};
+	new Notification("Successfully subscribed", options);
+}
+
 function askForNotificationPermission() {
 	Notification.requestPermission(function(result) {
 		console.log("User choice", result);
 		if (result !== "granted") {
 			console.log("Denied");
 		} else {
+			displayConfirmationNotification();
 		}
 	});
 }
