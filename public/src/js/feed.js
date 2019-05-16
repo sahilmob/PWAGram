@@ -29,6 +29,15 @@ function initMedia() {
 			});
 		};
 	}
+	navigator.mediaDevices
+		.getUserMedia({ video: true })
+		.then(function(stream) {
+			videoPlayer.srcObject = stream;
+			videoPlayer.style.display = "block";
+		})
+		.catch(function(err) {
+			imagePicker.style.display = "block";
+		});
 }
 
 function openCreatePostModal() {
@@ -51,6 +60,9 @@ function openCreatePostModal() {
 
 function closeCreatePostModal() {
 	createPostArea.style.display = "none";
+	videoPlayer.style.display = "none";
+	imagePicker.style.display = "none";
+	canvasElement.style.display = "none";
 }
 
 shareImageButton.addEventListener("click", openCreatePostModal);
