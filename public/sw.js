@@ -176,6 +176,7 @@ self.addEventListener("notificationclick", function(event) {
 		notification.close();
 	} else {
 		console.log(action);
+		notification.close();
 	}
 });
 
