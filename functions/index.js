@@ -15,10 +15,10 @@ exports.storePostData = functions.https.onRequest(function(request, response) {
 			.database()
 			.ref("posts")
 			.push({
-				id: req.body.id,
-				title: req.body.title,
-				location: req.body.location,
-				image: req.body.image
+				id: request.body.id,
+				title: request.body.title,
+				location: request.body.location,
+				image: request.body.image
 			})
 			.then(function() {
 				res.status(201).json({ message: "Data stored", id: request.body.id });
