@@ -28,7 +28,14 @@ window.addEventListener("beforeinstallprompt", function(event) {
 function displayConfirmationNotification() {
 	if ("serviceWorker" in navigator) {
 		var options = {
-			body: "You successfully subscribed to our notification service (From SW)!"
+			body:
+				"You successfully subscribed to our notification service (From SW)!",
+			icon: "/src/images/icons/app-icon-96x96.png",
+			image: "/src/images/sf-boat.jpg",
+			dir: "ltr",
+			lang: "en-US",
+			vibrate: [100, 50, 200],
+			badge: "/src/images/icons/app-icon-96x96.png"
 		};
 		navigator.serviceWorker.ready.then(function(sw) {
 			sw.showNotification("Successfully subscribed", options);
