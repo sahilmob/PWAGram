@@ -180,6 +180,10 @@ self.addEventListener("notificationclick", function(event) {
 	}
 });
 
+self.addEventListener("notificationclose", function(event) {
+	console.log("Notification was closed", event);
+});
+
 //Implementing dynamic caching after requesting data from the network
 // self.addEventListener("fetch", function(event) {
 // 	event.respondWith(
