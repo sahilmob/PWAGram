@@ -35,7 +35,9 @@ function displayConfirmationNotification() {
 			dir: "ltr",
 			lang: "en-US",
 			vibrate: [100, 50, 200],
-			badge: "/src/images/icons/app-icon-96x96.png"
+			badge: "/src/images/icons/app-icon-96x96.png",
+			tag: "confirmation-notification",
+			renotify: true
 		};
 		navigator.serviceWorker.ready.then(function(sw) {
 			sw.showNotification("Successfully subscribed", options);
