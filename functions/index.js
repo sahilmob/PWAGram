@@ -21,7 +21,9 @@ exports.storePostData = functions.https.onRequest(function(request, response) {
 				image: request.body.image
 			})
 			.then(function() {
-				res.status(201).json({ message: "Data stored", id: request.body.id });
+				response
+					.status(201)
+					.json({ message: "Data stored", id: request.body.id });
 			})
 			.catch(function(err) {
 				response.status(500).json({ error: err });
