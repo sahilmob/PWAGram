@@ -7,9 +7,33 @@ var sharedMomentsArea = document.querySelector("#shared-moments");
 var form = document.querySelector("form");
 var titleInput = document.getElementById("title");
 var locationInput = document.getElementById("location");
+var videoPlayer = document.getElementById("player");
+var canvasElement = document.getElementById("canvas");
+var captureButton = document.getElementById("capture-btn");
+var imagePicker = document.getElementById("image-picker");
+var imagePickerArea = document.getElementById("pick-image");
+
+function initMedia() {
+	if (!("mediaDevices" in navigator)) {
+		navigator.mediaDevices = {};
+	}
+	if (!("getUserMedia" in navigator.mediaDevices)) {
+		navigator.mediaDevices.getUserMedia = function(constraints) {
+			var getUserMedia =
+				navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+			if (!getUserMedia) {
+				return Promise.reject(new Error("getUserMedia is not implemented!"));
+			}
+			return new Promise(function(resolve, reject) {
+				getUserMedia.call(navigator, constraints, resolve, reject);
+			});
+		};
+	}
+}
 
 function openCreatePostModal() {
 	createPostArea.style.display = "block";
+	initMedia();
 	if (deferredPrompt) {
 		deferredPrompt.prompt();
 
