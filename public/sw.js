@@ -132,21 +132,16 @@ self.addEventListener("sync", function(event) {
 			readAllData("sync-posts").then(function(data) {
 				//loop through data to check if there is more than one post submitted while there is no connection
 				for (var dt of data) {
+					var postData = new FormData();
+					postData.append("id", dt.id);
+					postData.append("title", dt.title);
+					postData.append("location", dt.location);
+					postData.append("file", dt.picture, dt.id + ".png");
 					fetch(
 						"https://us-central1-pwagram-f1780.cloudfunctions.net/storePostData",
 						{
 							method: "POST",
-							headers: {
-								"Content-Type": "application/json",
-								Accept: "application/json"
-							},
-							body: JSON.stringify({
-								id: dt.id,
-								title: dt.title,
-								location: dt.location,
-								image:
-									"https://firebasestorage.googleapis.com/v0/b/pwagram-f1780.appspot.com/o/sf-boat.jpg?alt=media&token=65d437f9-c833-47a8-a881-cd6207983ef4"
-							})
+							body: postData
 						}
 					)
 						.then(function(response) {
