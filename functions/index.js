@@ -35,17 +35,9 @@ exports.storePostData = functions.https.onRequest(function(request, response) {
 			})
 			.then(function(subscriptions) {
 				subscriptions.forEach(function(subscription) {
-					// we could use pushConfig = subscription.val() since the have the same structure
-					var pushConfig = {
-						endpoint: subscription.val().endpoint,
-						keys: {
-							auth: subscription.val().auth,
-							p256dh: subscription.val().p256dh
-						}
-					};
 					webpush
 						.sendNotification(
-							pushConfig,
+							subscription.val(),
 							JSON.stringify({ title: "New Post", content: "New Post added!" })
 						)
 						.catch(function(err) {
