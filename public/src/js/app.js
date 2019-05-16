@@ -57,18 +57,61 @@ function displayConfirmationNotification() {
 	}
 }
 
+function configurePushSub() {
+	if (!("serviceWorker" in navigator)) {
+		return;
+	}
+	var swReg;
+	navigator.serviceWorker.ready
+		.then(function(sw) {
+			swReg = sw;
+			return sw.pushManager.getSubscription();
+		})
+		.then(function(sub) {
+			if (sub === null) {
+				var vapidPublicKey =
+					"BL_wj4PG-4xTI2alweELHJfgaWTYuceLlOTevMB9Djn1bjulNFDKgPvmGjhxbgDSQECPzlJqqSv09ZANtcdLjqI";
+				var convertedVapidPublicKey = urlBase64ToUint8Array(vapidPublicKey);
+				return swReg.pushManager.subscribe({
+					userVisibleOnly: true,
+					applicationServerKey: convertedVapidPublicKey
+				});
+			} else {
+			}
+		})
+		.then(function(newSub) {
+			return fetch("https://pwagram-f1780.firebaseio.com/subscriptions.json", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Accept: "application/json"
+				},
+				body: JSON.stringify(newSub)
+			});
+		})
+		.then(function(res) {
+			if (res.ok) {
+				displayConfirmationNotification();
+			}
+		})
+		.catch(function(err) {
+			console.log(err);
+		});
+}
+
 function askForNotificationPermission() {
 	Notification.requestPermission(function(result) {
 		console.log("User choice", result);
 		if (result !== "granted") {
 			console.log("Denied");
 		} else {
-			displayConfirmationNotification();
+			configurePushSub();
+			// displayConfirmationNotification();
 		}
 	});
 }
 
-if ("Notification" in window) {
+if ("Notification" in window && "serviceWorker" in navigator) {
 	for (var i = 0; i < enableNotificationsButtons.length; i++) {
 		enableNotificationsButtons[i].style.display = "inline-block";
 		enableNotificationsButtons[i].addEventListener(
